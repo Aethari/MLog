@@ -9,12 +9,12 @@
 #define MLOG_H
 
 /// The path to the log file.
-char log_path[1000]
+char log_path[1000];
 
 /// Creates a log file at the directory of the running application.
 /// Should only be called once, at the top of the main function.
 /// Sets log_path to the absolute path of the file created.
-void log_init();
+void MLog_init();
 
 /// Clears the log file, sparing no content
 void log_clear();
@@ -23,17 +23,30 @@ void log_clear();
 ///
 /// Parameters:
 /// - msg: The message to be written to the log file
-void log_write(char msg[]);
+void MLog_write(char msg[]);
 
 /// Writes a message to the log file and prints to the terminal
 ///
 /// Parameters:
 /// - msg: The message to be written to the log file and printed to the terminal
-void log_pwrite(char msg[]);
+void MLog_pwrite(char msg[]);
+
+/// Reads the content of the log file into a string and returns a
+/// pointer to it. The string is dynamically allocated, and MUST
+/// be freed after use.
+///
+/// Returns:
+/// A pointer to a dynamically allocated string
+char *MLog_read();
 
 #endif
 
 #ifdef MLOG_IMPL
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <libgen.h>
 
 #ifdef __unix__
 	#include <unistd.h>
@@ -43,7 +56,7 @@ void log_pwrite(char msg[]);
 	#include <windows.h>
 #endif
 
-void log_init() {
+void MLog_init() {
 	// get the absolute path to the directory of the running exe
 	char exe_path[1000];
 
@@ -59,20 +72,36 @@ void log_init() {
 	strcat(log_path, "/log.txt");
 }
 
-void log_clear() {
+void MLog_clear() {
 	FILE *log_file = fopen(log_path, "w");
 	fclose(log_file);
 }
 
-void log_write(char msg[]) {
+void MLog_write(char msg[]) {
 	FILE *log_file = fopen(log_path, "a");
 	fwrite(msg, strlen(msg), 1, log_file);
 	fclose(log_file);
 }
 
-void log_pwrite(char msg[]) {
+void MLog_pwrite(char msg[]) {
 	printf(msg);
-	log_write(msg);
+	MLog_write(msg);
+}
+
+char *MLog_read() {
+	FILE *log_file = fopen(log_path, "rb");
+
+	fseek(log_file, 0, SEEK_END);
+	long size = ftell(log_file);
+	fseek(log_file, 0, SEEK_SET);
+
+	char *out = malloc(size + 1);
+
+	fread(out, 1, size, log_file);
+	out[size] = '\0';
+
+	fclose(log_file);
+	return out;
 }
 
 #endif
