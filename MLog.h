@@ -2,7 +2,7 @@
  * Single header C logging library
  * See README.md for more info
  * See LICENSE.txt for license info
- * 2025 DJaySky (github.com/DJaySky)
+ * 2025 Aethari (github.com/Aethari)
  */
 
 #ifndef MLOG_H
