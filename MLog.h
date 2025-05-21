@@ -56,6 +56,8 @@ char *MLog_read();
 	#include <windows.h>
 #endif
 
+char log_path[1000];
+
 void MLog_init() {
 	// get the absolute path to the directory of the running exe
 	// using preprocessor directives in functions is very dirty - change
