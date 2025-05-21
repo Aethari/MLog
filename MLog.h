@@ -9,7 +9,7 @@
 #define MLOG_H
 
 /// The path to the log file.
-char log_path[1000];
+extern char log_path[1000];
 
 /// Creates a log file at the directory of the running application.
 /// Should only be called once, at the top of the main function.
@@ -58,6 +58,8 @@ char *MLog_read();
 
 void MLog_init() {
 	// get the absolute path to the directory of the running exe
+	// using preprocessor directives in functions is very dirty - change
+	// to variable later.
 	char exe_path[1000];
 
 	#ifdef __unix__

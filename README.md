@@ -18,7 +18,9 @@ Make sure [MLog.h](MLog.h) is somewhere where your C program can access it
 #include "MLog.h"
 ```
 It is neccessary to define `MLOG_IMPL` (MLog Implementation) before including
-the header, as this will give you the defined versions of the methods.  
+the header, as this will give you the defined versions of the methods. 
+However, `MLOG_IMPL` can only be defined in ONE file, otherwise, your program
+will not compile.
 
 It is also worthwhile to note that the `write()` and `pwrite()` functions do
 not automatically append a newline when writing/printing. You will have to do
@@ -28,9 +30,6 @@ this yourself.
 Because MLog is so tiny, we can fit the documentation for the library in the
 README. Documentation can also be found in [MLog.h](MLog.h) where they are
 declared.  
-
-> `char log_path[1000]`
->> The path to the log file.
 
 > `void MLog_init();`
 >> Creates a log file at the directory of the running application. Should
